@@ -1,0 +1,39 @@
+<h1>Carrito</h1>
+<a href="http://localhost:8080/productos">Productos</a>
+<div class="productos-container">
+    {{#each perfumesSolos}}
+            <div class="productos">
+                <h2>{{this.productoId.nombre}}</h2>
+                <p>{{this.productoId.precio}}</p>
+                <p>{{this.productoId.categoria}}</p>
+                <p>{{this.productoId._id}}</p>
+                <p>{{this.cantidad}}</p>
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" placeholder="Cantidad" id="cantidad-agregar" name="cantidad">
+                <button id="boton-agregar" onclick="modificarCantidad('{{this.productoId._id}}')">Agregar cantidad</button>
+                <button onclick="borrarProducto('{{this.productoId._id}}')">Borrar producto</button>
+            </div>
+    {{/each}}
+</div>
+<script>
+    async function modificarCantidad(id){
+            const cantidad = document.getElementById("cantidad-agregar").value;
+            const response = await fetch(`http://localhost:8080/carrito/${id}/asignar`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body:JSON.stringify({cantidad})
+            });
+        ;
+        }
+    async function borrarProducto (idProducto){
+            const response = await fetch(`http://localhost:8080/carrito/${idProducto}/delete`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            alert("Se elimino correctamente")
+        }
+</script>

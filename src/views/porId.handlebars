@@ -1,0 +1,21 @@
+<h1>Producto</h1>
+<a href="http://localhost:8080/productos">Volver</a>
+        <div class="productos-container">
+            <h2>{{productos.nombre}}</h2>
+            <p>{{productos.precio}}</p>
+            <p>{{productos.categoria}}</p>
+            <p><b>ID:</b>{{productos._id}}</p>
+            <button onclick="agregarCarrito('{{this._id}}')">Agregar a carrito</button>
+        </div>
+        <script>
+            async function agregarCarrito (idProducto){
+            const response = await fetch(`http://localhost:8080/carrito/${idProducto}/asignar`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            alert("Se agrego correctamente")
+        }
+        </script>
+    

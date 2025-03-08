@@ -1,0 +1,93 @@
+<h1>Productos</h1>
+<div>
+    <a href="http://localhost:8080/carrito">Carrito</a>
+        <div class="productos-container">
+            {{#each perfumesSolos}}
+            <div class="productos">
+                <div class="img-container">
+                    <img src='{{this.img}}' alt="" class="img">
+                </div>
+                <h2>{{this.nombre}}</h2>
+                <p><b>Precio:</b>{{this.precio}}</p>
+                <p><b>Categoria:</b>{{this.categoria}}</p>
+                <p><b>ID:</b>{{this._id}}</p>
+                <button onclick="agregarCarrito('{{this._id}}')">Agregar al carrito</button>
+            </div>
+            {{/each}}
+        </div>
+    <a href={{paginaAnterior}}>Pagina anterior</a>
+    <a href={{paginaSiguiente}}>Pagina Siguiente</a>
+
+<div class="forms-container">
+        <form action="/productos/buscar" method="GET">
+        <label for="id">Buscar por ID</label>
+        <input type="text" name="id">
+        <button type="submit">Buscar</button>
+    </form>
+<form  action="http://localhost:8080/productos" method="POST">
+    <h2>Crear producto</h2>
+    <input type="text" placeholder="Nombre" id="nombre-crear" name="nombre">
+    <input type="text" placeholder="URL Imagen" id="img-crear" name="img">
+    <input type="number" placeholder="Stock" id="stock-crear" name="stock">
+    <input type="number" placeholder="Precio" id="precio-crear" name="precio">
+    <input type="text" placeholder="Categoria" id="categoria-crear" name="categoria">
+    <button  id="submit-crear" type="submit">Crear producto</button>
+</form>
+<form  id="actualizar">
+    <h2>Editar producto</h2>
+    <input type="hidden" name="_method" value="PUT">
+    <input type="text" placeholder="ID" id="id-editar" name="id">
+    <input type="text" placeholder="Nombre" id="nombre-editar" name="nombre">
+    <input type="text" placeholder="URL Imagen" id="img-editar" name="img">
+    <input type="number" placeholder="Stock" id="stock-editar" name="stock">
+    <input type="number" placeholder="Precio" id="precio-editar" name="precio">
+    <input type="text" placeholder="Categoria" id="categoria-editar" name="categoria">
+    <button  id="submit-editar" type="submit">Editar producto</button>
+</form>
+<form id="borrar">
+    <h2>Borrar producto</h2>
+    <input type="text" placeholder="ID para borrar" id="id-borrar" name="id">
+        <button  id="submit-borrar">Borrar producto</button>
+    </form>
+</div>
+    <script>
+        document.getElementById("actualizar").addEventListener("submit", async function(event) {
+            const id = document.getElementById("id-editar").value;
+            const img = document.getElementById("img-editar").value;
+            const nombre = document.getElementById("nombre-editar").value;
+            const precio = document.getElementById("precio-editar").value;
+            const stock = document.getElementById("stock-editar").value;
+            const categoria = document.getElementById("categoria-editar").value;
+            
+
+            const response = await fetch(`http://localhost:8080/productos/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({nombre, precio, stock,img,categoria })
+            });
+
+        });
+
+        document.getElementById("borrar").addEventListener("submit", async function(event) {
+            const id = document.getElementById("id-borrar").value;
+            const response = await fetch(`http://localhost:8080/productos/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        });
+
+        async function agregarCarrito (idProducto){
+            const response = await fetch(`http://localhost:8080/carrito/${idProducto}/asignar`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            alert("Se agrego correctamente")
+        }
+    </script>
+</div>
